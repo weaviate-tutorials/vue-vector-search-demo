@@ -1,6 +1,38 @@
-# vue-demo
+# vue-vector-search-demo
 
-This template should help get you started developing with Vue 3 in Vite.
+This repo should help get you started developing with Weaviate and Vue 3.
+
+
+## Installation 
+
+1. Clone the repo with the following command
+
+```
+git clone https://github.com/malgamves/vue-vector-search-demo
+```
+
+2. Install the necessary project dependencies with the following command
+
+```
+yarn install
+```
+3. Create a Weaviate instance as described in [this guide](https://weaviate.io/developers/weaviate/quickstart#step-2-create-an-instance)
+
+4. Create a `.env` file and add the following keys
+    - your Open AI API key as `VITE_OPENAI_KEY` (you can get this in your [Open AI settings](https://platform.openai.com/account/api-keys))
+    - your Weaviate API key as `VITE_WEAVIATE_API_KEY` (you can get this in your [Weaviate dashboard](https://console.weaviate.cloud/dashboard) under sandbox details)
+    - your Weaviate host URL as `VITE_WEAVIATE_HOST_URL` (you can get this in your [Weaviate dashboard](https://console.weaviate.cloud/dashboard) under sandbox details)
+  
+
+5. Start your Vue.js app with the following command
+
+```
+yarn dev
+```
+
+6. Go through the steps to use the app i.e. Initialize, Import Data and Search 💫
+
+   
 
 ## Recommended IDE Setup
 
@@ -21,17 +53,6 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
 
 ### Type-Check, Compile and Minify for Production
 
