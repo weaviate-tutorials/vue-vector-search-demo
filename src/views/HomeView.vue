@@ -16,7 +16,7 @@ let stepState = useStorage("steps-local-storage", step.value);
 
 const client: WeaviateClient = weaviate.client({
   scheme: "https",
-  host: import.meta.env.VITE_WEAVIATE_HOST_KEY, 
+  host: import.meta.env.VITE_WEAVIATE_HOST_URL, 
   apiKey: new ApiKey(import.meta.env.VITE_WEAVIATE_API_KEY), 
   headers: {
     "X-OpenAI-Api-Key": import.meta.env.VITE_OPENAI_KEY,
