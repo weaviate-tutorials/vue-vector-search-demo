@@ -4,12 +4,10 @@ import weaviate, {
   ObjectsBatcher,
   ApiKey,
 } from "weaviate-ts-client";
-// import fetch from 'node-fetch';
 import { onMounted, ref } from "vue";
 import { useStorage } from "@vueuse/core";
 
 const results = ref();
-const genResult = ref()
 const step = ref(1);
 const searchQuery = ref("");
 
@@ -26,10 +24,10 @@ const client: WeaviateClient = weaviate.client({
 
 const classObj = {
   class: "Music5000",
-  vectorizer: "text2vec-openai", // If set to "none" you must always provide vectors yourself. Could be any other "text2vec-*" also.
+  vectorizer: "text2vec-openai", 
   moduleConfig: {
     "text2vec-openai": {},
-    "generative-openai": {}, // Ensure the `generative-openai` module is used for generative queries
+    "generative-openai": {}, 
   },
 };
 
@@ -55,7 +53,7 @@ async function importMusic() {
   const batchSize = 100;
 
   for (const songs of data) {
-    // Construct an object with a class and properties 'answer' and 'question'
+    // Construct an object with a class and properties corresponding to data shape
     const obj = {
       class: "Music5000",
       properties: {
@@ -121,7 +119,6 @@ onMounted(async () => {});
 function nextStep() {
   if (stepState != 3) {
     stepState.value = stepState.value + 1;
-    console.log(stepState.value);
   }
 }
 </script>
@@ -332,15 +329,11 @@ function nextStep() {
             
           </div>
 
-          <!-- cut off -->
           
         </div>
         
       </div>
     </div>
 
-    <h1
-      class="flex text-3xl pt-96 font-bold text-blue-600 items-center justify-center text-center"
-    ></h1>
   </main>
 </template>
