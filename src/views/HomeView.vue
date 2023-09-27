@@ -9,6 +9,7 @@ import { onMounted, ref } from "vue";
 import { useStorage } from "@vueuse/core";
 
 const results = ref();
+const genResult = ref()
 const step = ref(1);
 const searchQuery = ref("");
 
@@ -16,11 +17,11 @@ let stepState = useStorage("steps-local-storage", step.value);
 
 const client: WeaviateClient = weaviate.client({
   scheme: "https",
-  host: import.meta.env.VITE_WEAVIATE_HOST_URL, 
-  apiKey: new ApiKey(import.meta.env.VITE_WEAVIATE_API_KEY), 
+  host: import.meta.env.VITE_WEAVIATE_HOST_URL,
+  apiKey: new ApiKey(import.meta.env.VITE_WEAVIATE_API_KEY),
   headers: {
     "X-OpenAI-Api-Key": import.meta.env.VITE_OPENAI_KEY,
-  }, 
+  },
 });
 
 const classObj = {
@@ -92,32 +93,30 @@ async function nearTextQuery() {
     .withClassName("Music5000")
     .withFields("title artist rank album year")
     .withNearText({ concepts: [`"${searchQuery.value}"`] })
-    .withLimit(5)
+    .withLimit(2)
     .do();
 
   results.value = res.data.Get.Music5000;
-
   return res;
 }
 
-// async function generativeSearchQuery() {
-//   const res = await client.graphql
-//     .get()
-//     .withClassName("Question")
-//     .withFields("question answer category year")
-//     .withNearText({ concepts: ["biology"] })
-//     .withGenerate({
-//       singlePrompt: "Explain {answer} as you might to a five-year-old.",
-//     })
-//     .withLimit(5)
-//     .do();
+async function generativeSearchQuery() {
+  const res = await client.graphql
+    .get()
+    .withClassName("Music5000")
+    .withFields("title artist album rank")
+    .withNearText({ concepts: [`"${searchQuery.value}"`] })
+    .withGenerate({
+      singlePrompt: "Give me a fun fact about the song {title} by {artist} in one short paragraph.",
+    })
+    .withLimit(2)
+    .do();
+  
+  results.value = res.data.Get.Music5000;
+  return res;
+}
 
-//   return res;
-// }
-
-
-onMounted(async () => {
-});
+onMounted(async () => {});
 
 function nextStep() {
   if (stepState != 3) {
@@ -207,12 +206,13 @@ function nextStep() {
             </h2>
 
             <p class="hidden text-teal-500 sm:mt-4 sm:block">
-              all you have to do now is add a schema to your weaviate instance by clicking the button below
+              all you have to do now is add a schema to your weaviate instance
+              by clicking the button below
             </p>
             <div class="mt-4 md:mt-8">
               <button
                 @click="addSchema()"
-                class="inline-block rounded border border-white bg-white px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
+                class="inline-block rounded border border-white bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
               >
                 add schema
               </button>
@@ -231,12 +231,13 @@ function nextStep() {
             </h2>
 
             <p class="hidden text-teal-500 sm:mt-4 sm:block">
-              we're importing rolling stones top 500 albums of the last century, once imported you can search it
+              we're importing rolling stones top 500 albums of the last century,
+              once imported you can search it
             </p>
             <div class="mt-4 md:mt-8">
               <button
                 @click="importMusic()"
-                class="inline-block rounded border border-white bg-white px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
+                class="inline-block rounded border border-white bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
               >
                 import data
               </button>
@@ -255,33 +256,27 @@ function nextStep() {
           type="text"
           id="Search"
           placeholder="Search for..."
-          class="w-2/3 rounded-md border-gray-200 py-2.5 pl-4 pe-10 shadow-sm sm:text-sm"
+          class="w-2/3 rounded-md border-gray-200 bg-slate-300 py-2.5 pl-4 pe-10 shadow-sm sm:text-sm"
         />
 
-        <span class="absolute end-[480px] w-5 place-content-center">
-          <button
-            @click="nearTextQuery()"
-            type="button"
-            class="text-gray-600 hover:text-gray-700"
-          >
-            <span class="sr-only">Search</span>
+      </div>
 
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="h-4 w-4"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </button>
-        </span>
+      <div class="flex items-start justify-center pt-5 gap-2">
+
+        <button
+                @click="nearTextQuery()"
+                class="inline-block rounded border border-white bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-teal-500 focus:outline-none focus:ring focus:ring-yellow-400"
+              >
+                Search
+              </button>
+
+
+        <button
+                @click="generativeSearchQuery()"
+                class="inline-block rounded border border-white bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-teal-500 focus:outline-none focus:ring focus:ring-yellow-400"
+              >
+                Generative Search
+              </button>
       </div>
 
       <div v-if="results" class="flex items-start justify-center">
@@ -297,17 +292,50 @@ function nextStep() {
             </strong>
 
             <div v-for="result in results">
-              <a
-                href="#"
-                class="block rounded-lg px-4 py-2 text-sm text-gray-500"
-                role="menuitem"
-              >
-                {{ result.title }} by {{ result.artist }} from
+              <div class="space-y-4">
+                <details class="group [&_summary::-webkit-details-marker]:hidden" open>
+                  <summary
+                    class="flex cursor-pointer items-center justify-between gap-1.5 rounded-lg text-sm p-4 text-gray-900"
+                  >
+                    <h2 class="font-medium">
+                      {{ result.title }} by {{ result.artist }} from
                 {{ result.album }}
-              </a>
+                    </h2>
+              
+                    <svg
+                      v-if="result._additional"
+                      class="h-5 w-5 shrink-0 transition duration-300 group-open:-rotate-180"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </summary>
+              
+                  <p 
+                  v-if="result._additional"
+                  class="mt-2 px-4 text-xs leading-relaxed text-gray-700">
+                    {{ result._additional.generate.singleResult }}
+                  </p>
+                </details>
+            
+              </div>
             </div>
+
+            
           </div>
+
+          <!-- cut off -->
+          
         </div>
+        
       </div>
     </div>
 
