@@ -23,7 +23,7 @@ const client: WeaviateClient = weaviate.client({
 });
 
 const classObj = {
-  class: "Music5000",
+  class: "Music50",
   vectorizer: "text2vec-openai", 
   moduleConfig: {
     "text2vec-openai": {},
@@ -33,7 +33,7 @@ const classObj = {
 
 async function addSchema() {
   const res = await client.schema.classCreator().withClass(classObj).do();
-  console.log(res);
+  // console.log(res);
 }
 
 async function getJsonData() {
@@ -55,7 +55,7 @@ async function importMusic() {
   for (const songs of data) {
     // Construct an object with a class and properties corresponding to data shape
     const obj = {
-      class: "Music5000",
+      class: "Music50",
       properties: {
         rank: songs.rank,
         title: songs.title,
@@ -88,21 +88,21 @@ async function importMusic() {
 async function nearTextQuery() {
   const res = await client.graphql
     .get()
-    .withClassName("Music5000")
+    .withClassName("Music50")
     .withFields("title artist rank album year")
     .withNearText({ concepts: [`"${searchQuery.value}"`] })
     .withLimit(2)
     .do();
 
-  results.value = res.data.Get.Music5000;
+  results.value = res.data.Get.Music50;
   return res;
 }
 
 async function generativeSearchQuery() {
   const res = await client.graphql
     .get()
-    .withClassName("Music5000")
-    .withFields("title artist album rank")
+    .withClassName("Music50")
+    .withFields("title artist album rank year")
     .withNearText({ concepts: [`"${searchQuery.value}"`] })
     .withGenerate({
       singlePrompt: "Give me a fun fact about the song {title} by {artist} in one short paragraph.",
@@ -110,7 +110,7 @@ async function generativeSearchQuery() {
     .withLimit(2)
     .do();
   
-  results.value = res.data.Get.Music5000;
+  results.value = res.data.Get.Music50;
   return res;
 }
 
@@ -209,7 +209,7 @@ function nextStep() {
             <div class="mt-4 md:mt-8">
               <button
                 @click="addSchema()"
-                class="inline-block rounded border border-white bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
+                class="inline-block rounded border border-slate-600 bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-teal-500 focus:outline-none focus:ring focus:ring-yellow-400"
               >
                 add schema
               </button>
@@ -228,13 +228,13 @@ function nextStep() {
             </h2>
 
             <p class="hidden text-teal-500 sm:mt-4 sm:block">
-              we're importing rolling stones top 500 albums of the last century,
+              we're importing rolling stones top 500 songs of the last century,
               once imported you can search it
             </p>
             <div class="mt-4 md:mt-8">
               <button
                 @click="importMusic()"
-                class="inline-block rounded border border-white bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
+                class="inline-block rounded border border-slate-600 bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-teal-500 focus:outline-none focus:ring focus:ring-yellow-400"
               >
                 import data
               </button>
@@ -278,7 +278,7 @@ function nextStep() {
 
       <div v-if="results" class="flex items-start justify-center">
         <div
-          class="item-start absolute flex z-10 mt-2 w-96 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
+          class="item-start absolute flex z-10 mt-2 w-[750px] divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
           role="menu"
         >
           <div class="p-2">
@@ -296,7 +296,7 @@ function nextStep() {
                   >
                     <h2 class="font-medium">
                       {{ result.title }} by {{ result.artist }} from
-                {{ result.album }}
+                {{ result.album }} rank {{ result.rank }}
                     </h2>
               
                     <svg
