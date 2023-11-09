@@ -184,11 +184,12 @@ function nextStep() {
       </div>
 
       <div
-        class="items-center justify-center flex-col flex pt-8"
+        class="items-center justify-center flex-col flex pt-6"
         :class="`${stepState == 3 ? 'hidden' : ''}`"
       >
         <button
-          class="inline-block items-center rounded-full border border-teal-600 bg-teal-600 p-3 text-white hover:bg-transparent hover:text-teal-600 focus:outline-none focus:ring active:text-teal-500"
+          class="inline-block items-center rounded-full border border-teal-600 p-3 
+          bg-black text-lime-500 transition hover:border-black hover:bg-lime-500 hover:text-black focus:outline-none focus:ring focus:ring-yellow-400"
           @click="nextStep()"
         >
           <span class="sr-only"> Next Step </span>
@@ -208,31 +209,27 @@ function nextStep() {
             />
           </svg>
         </button>
-        <p class="text-xs pt-2 text-gray-500">next step</p>
+        <p class="text-xs pt-2 text-black">next step</p>
       </div>
-    </div>
-
-    <div class="items-center justify-center flex pb-6 pt-10 p-8">
-        Search through Rolling Stones Top 500 songs of the last century.
     </div>
 
     <section v-if="stepState == 1">
       <div class="mx-auto px-4 pt-6 sm:px-6 lg:pt-8">
         <div class="p-6 md:pt-8 lg:pt-8">
           <div class="mx-auto max-w-xl text-center">
-            <h2 class="text-2xl font-bold text-teal-500 md:text-3xl">
+            <h2 class="text-2xl font-bold text-black md:text-3xl">
               we've initialised weaviate for you
             </h2>
 
-            <p class="hidden text-teal-500 sm:mt-4 sm:block">
+            <p class="hidden text-black sm:mt-4 sm:block">
               all you have to do now is add a schema to your weaviate instance
               by clicking the button below
             </p>
             <div class="mt-4 md:mt-8">
               <button @click="addSchema()"
-                class="inline-block rounded border border-slate-600 bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-teal-500 focus:outline-none focus:ring focus:ring-yellow-400">
-                add schema
-              </button>
+          class="inline-block rounded border border-white bg-black px-12 py-3 text-sm font-medium text-lime-500 transition hover:border-black hover:bg-lime-500 hover:text-black focus:outline-none focus:ring focus:ring-yellow-400">
+          add schema
+        </button>
             </div>
           </div>
         </div>
@@ -243,19 +240,19 @@ function nextStep() {
       <div class="mx-auto px-4 pt-6 sm:px-6 lg:pt-8">
         <div class="p-6 md:pt-8 lg:pt-8">
           <div class="mx-auto max-w-xl text-center">
-            <h2 class="text-2xl font-bold text-teal-500 md:text-3xl">
+            <h2 class="text-2xl font-bold text-black md:text-3xl">
               time to import some data
             </h2>
 
-            <p class="hidden text-teal-500 sm:mt-4 sm:block">
+            <p class="hidden text-teal-black sm:mt-4 sm:block">
               we're importing rolling stones top 500 songs of the last century,
               once imported you can search it
             </p>
             <div class="mt-4 md:mt-8">
               <button @click="importMusic()"
-                class="inline-block rounded border border-slate-600 bg-slate-600 px-12 py-3 text-sm font-medium text-teal-500 transition hover:bg-transparent hover:text-teal-500 focus:outline-none focus:ring focus:ring-yellow-400">
-                import data
-              </button>
+          class="inline-block rounded border border-white bg-black px-12 py-3 text-sm font-medium text-lime-500 transition hover:border-black hover:bg-lime-500 hover:text-black focus:outline-none focus:ring focus:ring-yellow-400">
+          import data
+        </button>
             </div>
           </div>
         </div>
@@ -274,7 +271,7 @@ function nextStep() {
       <div class="flex items-start justify-center pt-5 gap-2">
 
         <button @click="nearTextQuery()"
-          class="inline-block rounded border border-white bg-black px-12 py-3 text-sm font-medium text-lime-500 transition hover:border-black hover:bg-lime-500 hover:bg-transparent hover:text-black focus:outline-none focus:ring focus:ring-yellow-400">
+          class="inline-block rounded border border-white bg-black px-12 py-3 text-sm font-medium text-lime-500 transition hover:border-black hover:bg-lime-500 hover:text-black focus:outline-none focus:ring focus:ring-yellow-400">
           Search
         </button>
 
