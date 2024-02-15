@@ -49,7 +49,7 @@ async function generativeSearchQuery() {
     .withFields("title artist album rank year")
     .withNearText({ concepts: [`"${searchQuery.value}"`] })
     .withGenerate({
-      singlePrompt: "write me a haiku about {title} by {artist}.",
+      singlePrompt: "write me a haiku about {title} by {artist}",
     })
     .withLimit(5)
     .do();
@@ -137,7 +137,7 @@ onMounted(async () => { });
                   </summary>
 
                   <p v-if="result._additional" class="mt-2 px-4 text-xs leading-relaxed text-gray-700">
-                    {{ result._additional.generate.singleResult }}
+                   Here is a haiku I wrote about this song. {{ result._additional.generate.singleResult }}
                   </p>
                 </details>
 
