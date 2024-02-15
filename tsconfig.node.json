@@ -7,11 +7,6 @@
     "nightwatch.conf.*",
     "playwright.config.*"
   ],
-  "ts-node": { // ts-node automated configuration using commonjs
-    "compilerOptions": {
-      "module": "CommonJS"
-    },
-  },
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
